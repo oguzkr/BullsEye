@@ -15,50 +15,57 @@ struct ContentView: View {
     @State private var game: Game = Game()
     
     var body: some View {
-        VStack {
+        ZStack {
+            Color("BackgroundColor")
+                .ignoresSafeArea(.all)
             VStack {
-                Text("🎯 PUT THE BULLSEYE AS CLOSE AS YOU 🎯")
-                    .bold()
-                    .kerning(2.0)
-                    .multilineTextAlignment(.center)
-                    .padding()
-                    .font(.footnote)
-                Text(String(game.target))
-                    .font(.largeTitle)
-                    .bold()
-                    .kerning(2.0)
-                HStack {
-                    Text("1")
-                        .padding(.leading, 20)
-                        .frame(width: 50)
-                    
-                    Slider(value: $sliderValue, in: 1.0...100.0)
-                        .padding([.leading, .trailing], 20)
-                    
-                    Text("100")
+                VStack {
+                    Text("🎯 PUT THE BULLSEYE AS CLOSE AS YOU 🎯")
                         .bold()
-                        .padding(.trailing, 20)
-                        .frame(width: 50)
-                }
-                Button(action: {
-                    self.alertIsVisible = true
-                }) {
-                    Text("Hit Me".uppercased())
+                        .kerning(2.0)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                        .font(.footnote)
+                    Text(String(game.target))
+                        .font(.largeTitle)
                         .bold()
+                        .kerning(2.0)
+                    HStack {
+                        Text("1")
+                            .padding(.leading, 20)
+                            .frame(width: 50)
+                        
+                        Slider(value: $sliderValue, in: 1.0...100.0)
+                            .padding([.leading, .trailing], 20)
+                        
+                        Text("100")
+                            .bold()
+                            .padding(.trailing, 20)
+                            .frame(width: 50)
+                    }
+                    Button(action: {
+                        self.alertIsVisible = true
+                    }) {
+                        Text("Hit Me".uppercased())
+                            .bold()
+                    }
+                    .padding(20)
+                    .background(ZStack {
+                        Color("ButtonColor")
+                        LinearGradient(gradient: Gradient(colors: [Color.white.opacity(0.3), Color.clear]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                    })
+                    .foregroundColor(.white)
+                    .cornerRadius(15)
+                    .font(.title3)
+                    .alert(isPresented: $alertIsVisible, content: {
+                        return Alert(
+                            title: Text("Hello There"),
+                            message: Text("The slider's value is \(Int(self.sliderValue))\n You scored \(game.points(sliderValue: Int(self.sliderValue)))"),
+                            dismissButton: .default(Text("Awesome!")))
+                    })
                 }
-                .padding(20)
-                .background(.blue)
-                .foregroundColor(.white)
-                .cornerRadius(15)
-                .font(.title3)
-                .alert(isPresented: $alertIsVisible, content: {
-                    return Alert(
-                        title: Text("Hello There"),
-                        message: Text("The slider's value is \(Int(self.sliderValue))\n You scored \(game.points(sliderValue: Int(self.sliderValue)))"),
-                        dismissButton: .default(Text("Awesome!")))
-                })
+                
             }
-            
         }
     }
 }
